@@ -1,0 +1,118 @@
+/*
+This is my attempt at the Struct question in grok. This should be fun.
+*/
+
+/*
+Implement solutions to Exercise 1, 2, and 3 on pages 10/11/12 of lec07.pdf:
+People have titles, a given name, a middle name, and a family name, 
+all of up to 50 characters each. People also have dates of birth (dd/mm/yyyy), 
+dates of marriage and divorce (as many as 10 of each), and dates of 
+death (with a flag to indicate whether or not they are dead yet). Each date 
+of marriage is accompanied by the name of a person. Assuming that people
+ work for less than 100 years each, people also have, for each year they 
+ worked, a year (yyyy), a net income and a tax liability (both rounded to 
+ whole dollars), and a date when that tax liability was paid.
+
+Countries are collections of people. Australia is expected to contain as many 
+as 30,000,000 people; New Zealand as many as 6,000,000 people.
+
+(1) Give declarations that reflect the data scenario that is described.
+
+(2) Write a function that calculates, for a specified country indicated 
+by a pointer argument (argument 1) with a number of persons in 
+it (argument 2), the average age of death. Do not include people that are not 
+yet dead.
+
+(3) Write a function that calculates, for the country indicated by a pointer 
+argument (argument 1) with a number of persons in it (argument 2) the total 
+taxation revenue in a specified year (argument 3).
+
+Now that you see the processing mode implied by Exercise (3), do you want to 
+go back now and revise your answer to Exercise (1)? If you did, would you need 
+to alter your function for Exercise (2) at all?
+
+(4) Write a main function to test the structs and functions written for the 
+exercises above.
+
+Note: no sample test has been set up as it would be quite tedius to write code 
+to handle the test input for the complex structures. It would be simpler to 
+just hardcode some test input data in your main function for the testing.
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TRUE 1
+#define FALSE 0
+
+#define MAXCHARS 50
+#define MAXWORK 100
+#define MAXMARAGE 5
+
+#define MAXPEEPAUS 30000000
+#define MAXPEEPNZ 6000000
+
+typedef char nstr[MAXCHARS + 1];
+
+//------------------------------
+typedef struct {
+    int dd, mm, yyyy;
+} date_t;
+
+typedef struct {
+    nstr given, other, fam;
+} name_t;
+
+typedef struct {
+    name_t spouse;
+    date_t start, end;
+} mary_t;
+
+typedef struct {
+    int yyyy;
+    int income, tax;
+    date_t taxdate;
+} work_t;
+//------------------------------
+// Parent Struct.
+typedef struct {
+    nstr title;
+    name_t name;
+    date_t dob;
+    date_t dod;
+    int is_dead;
+    mary_t mary[MAXMARAGE];
+    int num_marry;
+    work_t work[MAXWORK];
+    int num_work;
+} peeps_t;
+
+//------------------------------
+peeps_t people_aus[MAXPEEPAUS];
+peeps_t people_NZ[MAXPEEPNZ];
+//------------------------------
+
+int main(int argc, char *argv[]) {
+    date_t curr_date = {2020, 10, 14};
+    printf("%d, %d, %d\n", curr_date.yyyy, curr_date.mm, curr_date.dd);
+
+    return 0;
+}
+
+double avg_longevity(peeps_t *country[], int peeps) {
+    int dead_count=0, i;
+    double age_sum = 0;
+
+    for (i = 0; i < peeps; i++) {
+        
+        before_bday = ((country[i].dob.mm>curr_date.mm) || (country[i].dob.mm==now.mm && country[i].dob.dd>=curr_date.dd));
+
+        if (country[i].is_dead == TRUE) {
+            age_sum += country[i].dod.yyyy - country[i].dob.yyyy - before_bday;
+            dead_count++;
+        }
+    }
+    avg = age_sum/dead_count;
+
+    return avg;
+}
